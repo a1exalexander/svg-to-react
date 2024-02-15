@@ -1,6 +1,6 @@
 # @catsdev/svg-to-react
 
-This is a CLI tool for generating React icons from SVG files.
+This is a CLI tool for generating React icons from SVG files. It generates a React component for each SVG file and exports them as a single module with a common interface and types for the icons.
 
 ## Installation
 
@@ -52,7 +52,6 @@ my-project/
 │   │   ├── common/
 │   │   │   ├── Icon/
 │   │   │   │   ├── Icon.tsx
-│   │   │   │   ├── iconNames.ts
 │   │   │   │   ├── icons.ts
 │   │   │   │   ├── index.tsx
 │   │   │   │   └── types.ts
@@ -102,16 +101,6 @@ export const Icon: FC<IconProps> = memo(({ className, name, fill, size, style, o
 <hr>
 <br>
 
-`iconNames.ts` - contains the names of the icons.
-```ts
-export default [
-  'icon1',
-  'icon2',
-];
-```
-<hr>
-<br>
-
 `icons.ts` - contains the imports of the icons.
 ```ts
 export { ReactComponent as IconIcon1 } from '../../svg/icon1.svg';
@@ -125,7 +114,6 @@ export { ReactComponent as IconIcon2 } from '../../svg/icon2.svg';
 ```tsx
 export * from './Icon';
 export * from './types';
-export { default as iconNames } from './iconNames';
 ```
 
 <hr>
@@ -133,9 +121,13 @@ export { default as iconNames } from './iconNames';
 
 `types.ts` - contains the types of the icons.
 ```ts
-export type IconType =
-  | 'icon1'
-  | 'icon2';
+export const iconNames = [
+  'icon1',
+  'icon2',
+] as const;
+
+export type IconType = typeof iconNames[number];
+
 ```
 
 ## Contributing

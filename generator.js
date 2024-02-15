@@ -42,10 +42,13 @@ export const Icon: FC<IconProps> = memo(({ className, name, fill, size, style, o
       />
     )
   );
-});`,
+});
+
+`,
   'index.tsx': `export * from './Icon';
 export * from './types';
-export { default as iconNames } from './iconNames';`,
+
+`,
 };
 
 /**
@@ -117,39 +120,6 @@ function getFilteredFiles(files) {
 }
 
 /**
- * Generates a file containing an array of icon names based on the files in the input directory.
- *
- * @param {string} inputDir - The input directory path.
- * @param {string} outputDir - The output directory path.
- * @param {string} [filename='iconNames.ts'] - The name of the output file.
- */
-function createIconNamesFile(inputDir, outputDir, filename = 'iconNames.ts') {
-  fs.readdir(inputDir, (err, files) => {
-    const filteredFiles = getFilteredFiles(files);
-    try {
-      const iconNames = filteredFiles.length
-        ? filteredFiles.reduce((prev, cur, idx) => {
-            return `${prev}
-  '${cur.replace('.svg', '')}'${
-              filteredFiles.length === idx + 1
-                ? `,
-];
-`
-                : ','
-            }`;
-          }, 'export default [')
-        : `export default [];
-`;
-
-      fs.writeFileSync(`${outputDir}/${filename}`, iconNames);
-      console.log(`💚 ${filename} generated`);
-    } catch {
-      console.log(`🚨 ${filename} generation failure`);
-    }
-  });
-}
-
-/**
  * Generates a typescript file containing the icon types based on the input directory.
  * @param {string} inputDir - The input directory path.
  * @param {string} outputDir - The output directory path.
@@ -158,19 +128,22 @@ function createIconNamesFile(inputDir, outputDir, filename = 'iconNames.ts') {
 function createIconTypesFile(inputDir, outputDir, filename = 'types.ts') {
   fs.readdir(inputDir, (err, files) => {
     try {
+      const endExport = `
+
+export type IconType = typeof iconNames[number];
+`;
       const filteredFiles = getFilteredFiles(files);
       const iconTypes = filteredFiles.length
         ? filteredFiles.reduce((prev, cur, idx) => {
             return `${prev}
-  | '${cur.includes('.svg') ? cur.replace('.svg', '') : ''}'${
-              filteredFiles.length === idx + 1
-                ? `;
-`
-                : ''
-            }`;
-          }, 'export type IconType =')
-        : `export {};
-`;
+    '${cur.replace('.svg', '')}'${
+  filteredFiles.length === idx + 1
+  ? `,
+] as const;${endExport}`
+  : ','
+}`;
+          }, 'export const iconNames = [')
+        : `export const iconNames = [] as const;${endExport}`;
 
       fs.writeFileSync(`${outputDir}/${filename}`, iconTypes);
       console.log(`💚 ${filename} generated`);
@@ -217,13 +190,10 @@ function generate(inputDir, outputDir) {
   // Step 2: Create files from templates if they do not already exist
   createFilesFromTemplatesIfNotExist(outputDir);
 
-  // Step 3: Generate a file containing an array of icon names based on the files in the input directory
-  createIconNamesFile(inputDir, outputDir);
-
-  // Step 4: Generate a typescript file containing the icon types based on the input directory
+  // Step 3: Generate a typescript file containing the icon types based on the input directory
   createIconTypesFile(inputDir, outputDir);
 
-  // Step 5: Generate an icons file based on the input directory containing SVG files
+  // Step 4: Generate an icons file based on the input directory containing SVG files
   createIconsFile(inputDir, outputDir);
 }
 
