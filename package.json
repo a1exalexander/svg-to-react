@@ -1,0 +1,23 @@
+{
+  "name": "@catsdev/svg-to-react",
+  "version": "1.0.0",
+  "description": "CLI tool for generating React icons from SVG files",
+  "main": "main.js",
+  "bin": {
+    "svg-to-react": "main.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react",
+    "svg",
+    "cli"
+  ],
+  "author": "Oleksandr Ratushnyi",
+  "license": "MIT",
+  "dependencies": {
+    "yargs": "^17.7.2"
+  }
+}
+
