@@ -1,4 +1,4 @@
-# @catsdev/svg-to-react
+# @onlyredcats/svg-to-react
 
 This is a CLI tool for generating React icons from SVG files. It generates a React component for each SVG file and exports them as a single module with a common interface and types for the icons.
 
@@ -7,7 +7,7 @@ This is a CLI tool for generating React icons from SVG files. It generates a Rea
 To install the package run the following command:
 
 ```bash
-npm install @catsdev/svg-to-react
+npm install @onlyredcats/svg-to-react
 ```
 
 ## Usage

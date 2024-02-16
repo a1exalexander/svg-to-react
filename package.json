@@ -1,5 +1,5 @@
 {
-  "name": "@a1exalexander/svg-to-react",
+  "name": "@onlyredcats/svg-to-react",
   "version": "1.0.0",
   "description": "CLI tool for generating React icons from SVG files",
   "main": "main.js",
