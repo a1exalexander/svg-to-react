@@ -15,6 +15,8 @@ export interface IconProps {
   className?: string;
   name: IconType;
   size?: number;
+  width?: number;
+  height?: number;
   fill?: string;
   style?: CSSProperties;
   onClick?: DOMAttributes<SVGSVGElement>['onClick'];
@@ -24,7 +26,7 @@ export const iconTestId = 'icon';
 
 const getIconName = (name: IconType) => \`Icon\${name}\`;
 
-export const Icon: FC<IconProps> = memo(({ className, name, fill, size, style, onClick, ...rest }) => {
+export const Icon: FC<IconProps> = memo(({ className, name, fill, size, width, height, style, onClick, ...rest }) => {
   const IconComponent =
     (iconComponents[getIconName(name) as keyof typeof iconComponents] as FunctionComponent<SVGProps<SVGSVGElement>>) ||
     null;
@@ -37,7 +39,7 @@ export const Icon: FC<IconProps> = memo(({ className, name, fill, size, style, o
         fill={fill}
         data-name={name}
         className={className}
-        style={{ ...style, width: size, height: size }}
+        style={{ ...style, width: size ?? width, height: size ?? height }}
         {...rest}
       />
     )
