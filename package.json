@@ -1,6 +1,6 @@
 {
   "name": "@onlyredcats/svg-to-react",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CLI tool for generating React icons from SVG files",
   "main": "main.js",
   "repository": "https://github.com/a1exalexander/svg-to-react.git",
