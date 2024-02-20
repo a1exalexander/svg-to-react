@@ -26,7 +26,7 @@ export const iconTestId = 'icon';
 
 const getIconName = (name: IconType) => \`Icon\${name}\`;
 
-export const Icon: FC<IconProps> = memo(({ className, name, fill, size, width, height, style, onClick, ...rest }) => {
+export const Icon: FC<IconProps> = memo(({ className, name, fill = 'currentColor', size, width, height, style, onClick, ...rest }) => {
   const IconComponent =
     (iconComponents[getIconName(name) as keyof typeof iconComponents] as FunctionComponent<SVGProps<SVGSVGElement>>) ||
     null;
@@ -54,7 +54,7 @@ export * from './types';
 };
 
 /**
- * Check all the svg files in the output directory and remove width, height and fill attributes.
+ * Check all the svg files in the input directory and remove width, height and fill attributes.
  * @param {string} inputDir - The directory where the svg iocns located.
  */
 function cleanAllIcons(inputDir) {
