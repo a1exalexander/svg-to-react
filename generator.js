@@ -54,7 +54,33 @@ export * from './types';
 };
 
 /**
- * Creates files from templates if they do not already exist.
+ * Check all the svg files in the output directory and remove width, height and fill attributes.
+ * @param {string} inputDir - The directory where the svg iocns located.
+ */
+function cleanAllIcons(inputDir) {
+  fs.readdir(inputDir, (err, files) => {
+    files.forEach((file) => {
+      if (file.endsWith('.svg')) {
+        fs.readFile(`${inputDir}${file}`, 'utf8', (err, data) => {
+          if (err) {
+            return;
+          }
+          const result = data.replace(/(width|height|fill)="[^"]*"/g, '');
+          fs.writeFileSync(`${inputDir}${file}`, result, 'utf8');
+        });
+      }
+    });
+    if (err) {
+      console.log(`🚨 Failed to clean SVG icons: ${inputDir}`);
+    } else {
+      console.log(`🧹 SVG icons cleaned: ${inputDir}`);
+    }
+  });
+}
+
+/**
+ * Creates files from templates if they do not already exist in the specified output directory.
+ * @param {string} outputDir - The output directory where the files will be created.
  */
 function createFilesFromTemplatesIfNotExist(outputDir) {
   const files = Object.keys(templates);
@@ -63,8 +89,6 @@ function createFilesFromTemplatesIfNotExist(outputDir) {
     if (!fs.existsSync(`${outputDir}${file}`)) {
       fs.writeFileSync(`${outputDir}${file}`, templates[file]);
       console.log(`✅ Created file: ${file}`);
-    } else {
-      console.log(`📄 File already exists: ${file}`);
     }
   });
 }
@@ -84,6 +108,8 @@ function toPascalCase(text) {
 
 /**
  * Creates folders if they do not exist.
+ * @param {string} inputDir - The input directory path.
+ * @param {string} outputDir - The output directory path.
  */
 function createFoldersIfNotExist(inputDir, outputDir) {
   const folders = [inputDir, outputDir];
@@ -92,8 +118,6 @@ function createFoldersIfNotExist(inputDir, outputDir) {
     if (!fs.existsSync(folder)) {
       fs.mkdirSync(folder, { recursive: true });
       console.log(`✅ Created folder: ${folder}`);
-    } else {
-      console.log(`📁 Folder already exists: ${folder}`);
     }
   });
 }
@@ -139,16 +163,16 @@ export type IconType = typeof iconNames[number];
         ? filteredFiles.reduce((prev, cur, idx) => {
             return `${prev}
     '${cur.replace('.svg', '')}'${
-  filteredFiles.length === idx + 1
-  ? `,
+              filteredFiles.length === idx + 1
+                ? `,
 ] as const;${endExport}`
-  : ','
-}`;
+                : ','
+            }`;
           }, 'export const iconNames = [')
         : `export const iconNames = [] as const;${endExport}`;
 
       fs.writeFileSync(`${outputDir}/${filename}`, iconTypes);
-      console.log(`💚 ${filename} generated`);
+      console.log(`🧩 ${filename} file generated`);
     } catch {
       console.log(`🚨 ${filename} generation failure`);
     }
@@ -178,13 +202,19 @@ function createIconsFile(inputDir, outputDir, filename = 'icons.ts') {
 `;
 
       fs.writeFileSync(`${outputDir}/${filename}`, icons);
-      console.log(`💚 ${filename} generated`);
+      console.log(`💚 ${filename} file generated`);
     } catch {
       console.log(`🚨 ${filename} generation failure`);
     }
   });
 }
 
+/**
+ * Generates SVG icons and related files based on the input directory.
+ *
+ * @param {string} inputDir - The input directory containing SVG files.
+ * @param {string} outputDir - The output directory where the generated files will be saved.
+ */
 function generate(inputDir, outputDir) {
   // Step 1: Create folders if they do not exist
   createFoldersIfNotExist(inputDir, outputDir);
@@ -197,6 +227,9 @@ function generate(inputDir, outputDir) {
 
   // Step 4: Generate an icons file based on the input directory containing SVG files
   createIconsFile(inputDir, outputDir);
+
+  // Step 5: Clean all the svg files in the output directory
+  cleanAllIcons(inputDir);
 }
 
 module.exports = generate;
