@@ -13,7 +13,7 @@ npm install @onlyredcats/svg-to-react
 ## Usage
 Use the following command to generate React icons from SVG files:
 ```bash
-svg-to-react --input="./src/assets/" --output="./src/components/Icon/"
+svg-to-react --input="./src/assets/" --output="./src/components/Icon/" --clean
 ```
 
 In this command:
@@ -39,7 +39,7 @@ my-project/
 
 To generate React icons from SVG files in the `src/assets` directory and save them in `src/components/common/Icon`, you can run the mentioned command
 ```bash
-svg-to-react --input="./src/assets/" --output="./src/components/Icon/" --clean
+svg-to-react --input="./src/assets/" --output="./src/components/Icon/"
 ```
 
 After running CLI command, the `src/components/common/Icon` directory will contain generated React icon files based on the SVG files.

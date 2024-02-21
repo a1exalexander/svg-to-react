@@ -230,7 +230,7 @@ function generate(inputDir, outputDir, cleanSvg) {
   // Step 4: Generate an icons file based on the input directory containing SVG files
   createIconsFile(inputDir, outputDir);
 
-  // Step 5: Clean all the svg files in the output directory
+  // Step 5: Clean all the svg files in the input directory
   if (cleanSvg) {
     cleanAllIcons(inputDir);
   }
