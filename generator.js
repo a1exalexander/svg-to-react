@@ -58,6 +58,7 @@ export * from './types';
  * @param {string} inputDir - The directory where the svg iocns located.
  */
 function cleanAllIcons(inputDir) {
+  console.log(`🧹 Cleaning SVG icons: ${inputDir}`);
   fs.readdir(inputDir, (err, files) => {
     files.forEach((file) => {
       if (file.endsWith('.svg')) {
@@ -214,8 +215,9 @@ function createIconsFile(inputDir, outputDir, filename = 'icons.ts') {
  *
  * @param {string} inputDir - The input directory containing SVG files.
  * @param {string} outputDir - The output directory where the generated files will be saved.
+ * @param {boolean} cleanSvg - A flag to remove unnecessary attributes from SVG files.
  */
-function generate(inputDir, outputDir) {
+function generate(inputDir, outputDir, cleanSvg) {
   // Step 1: Create folders if they do not exist
   createFoldersIfNotExist(inputDir, outputDir);
 
@@ -229,7 +231,9 @@ function generate(inputDir, outputDir) {
   createIconsFile(inputDir, outputDir);
 
   // Step 5: Clean all the svg files in the output directory
-  cleanAllIcons(inputDir);
+  if (cleanSvg) {
+    cleanAllIcons(inputDir);
+  }
 }
 
 module.exports = generate;
